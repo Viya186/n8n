@@ -1,0 +1,53 @@
+name: 📦 Vérification de mise à jour n8n
+
+on:
+  schedule:
+    - cron: '0 8 1,15 * *'  # Tous les 1er et 15 du mois à 8h UTC
+  workflow_dispatch:
+
+jobs:
+  safe-n8n-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+
+      - name: Récupère la version actuelle
+        id: current
+        run: |
+          version=$(grep 'FROM n8nio/n8n:' Dockerfile | cut -d':' -f2)
+          echo "current_version=$version" >> $GITHUB_OUTPUT
+
+      - name: Récupère la dernière version stable de n8n
+        id: latest
+        run: |
+          latest=$(curl -s https://registry.hub.docker.com/v2/repositories/n8nio/n8n/tags |
+            jq -r '.results[].name' |
+            grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' |
+            sort -Vr |
+            head -n1)
+          echo "latest_version=$latest" >> $GITHUB_OUTPUT
+
+      - name: Compare et créer une PR si besoin
+        if: steps.current.outputs.current_version != steps.latest.outputs.latest_version
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git checkout -b bump/n8n-${{ steps.latest.outputs.latest_version }}
+          sed -i "s|FROM n8nio/n8n:.*|FROM n8nio/n8n:${{ steps.latest.outputs.latest_version }}|" Dockerfile
+          git add Dockerfile
+          git commit -m "⬆️ Mise à jour de n8n vers v${{ steps.latest.outputs.latest_version }}"
+          git push origin bump/n8n-${{ steps.latest.outputs.latest_version }}
+
+      - name: Créer une pull request
+        if: steps.current.outputs.current_version != steps.latest.outputs.latest_version
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "⬆️ Mise à jour sécurisée de n8n à v${{ steps.latest.outputs.latest_version }}"
+          body: |
+            Une nouvelle version stable de n8n est disponible.
+
+            Tu peux la merger si tu veux mettre à jour ton instance.
+          branch: bump/n8n-${{ steps.latest.outputs.latest_version }}
+          base: master
