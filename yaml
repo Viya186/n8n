@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: n8n
+    env: docker
+    plan: starter
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: N8N_BASIC_AUTH_PASSWORD
+        value: xuzkyv-batgoQ-4fomhy
+      - key: N8N_EDITOR_BASE_URL
+        value: https://n8n-j2xu.onrender.com
+      - key: N8N_HOST
+        value: n8n-j2xu.onrender.com
+      - key: N8N_PROTOCOL
+        value: https
+      - key: N8N_USER_FOLDER
+        value: /home/node/.n8n
+      - key: NODE_FUNCTION_ALLOW_EXTERNAL
+        value: puppeteer
