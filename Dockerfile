@@ -1,5 +1,5 @@
 # Utilise une version compatible de Node.js
-FROM node:20.20-alpine
+FROM node:20.19-alpine
 
 # Répertoire principal de travail
 WORKDIR /app
