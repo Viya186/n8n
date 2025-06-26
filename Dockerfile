@@ -1,26 +1,5 @@
-# Utilise une version Node.js compatible (et dispo)
-FROM node:20.19-alpine
+# Utilise l’image officielle de n8n
+FROM n8nio/n8n:1.48.1
 
-# Répertoire principal
-WORKDIR /app
-
-# Installe npm 9 pour corriger le bug avec les workspaces
-RUN npm install -g npm@9
-
-# Copie tous les fichiers du repo dans l'image
-COPY . .
-
-# Aller dans le CLI
-WORKDIR /app/packages/cli
-
-# Installer les dépendances
-RUN npm install --legacy-peer-deps
-
-# Builder le projet
-RUN npm run build
-
-# Port d'écoute
+# Expose le port attendu
 EXPOSE 5678
-
-# Démarrage
-CMD ["node", "./build/index.js"]
