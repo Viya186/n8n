@@ -10,13 +10,13 @@ COPY . .
 # Aller dans le dossier CLI de n8n
 WORKDIR /app/packages/cli
 
-# Installer les dépendances pour tout le monorepo, depuis la racine
-RUN npm install --legacy-peer-deps --workspace=cli
+# Installer les dépendances (pas besoin de --workspace ici)
+RUN npm install --legacy-peer-deps
 
-# Builder n8n (obligatoire pour que ./build/index.js existe)
-RUN npm run build --workspace=cli
+# Builder le projet (toujours dans ce dossier)
+RUN npm run build
 
-# Expose le port par défaut de n8n
+# Expose le port de n8n
 EXPOSE 5678
 
 # Démarrer n8n depuis le fichier buildé
