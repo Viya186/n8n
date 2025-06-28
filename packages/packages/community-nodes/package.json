@@ -1,0 +1,17 @@
+{
+  "name": "n8n-nodes-elevenlabs",
+  "version": "1.0.0",
+  "description": "ElevenLabs node for n8n",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint . --ext .ts"
+  },
+  "keywords": ["n8n", "workflow", "automation", "elevenlabs"],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
