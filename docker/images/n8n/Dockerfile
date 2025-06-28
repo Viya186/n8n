@@ -52,12 +52,14 @@ ENV SHELL=/bin/sh
 WORKDIR /home/node
 
 COPY --from=app-artifact-processor /app /usr/local/lib/node_modules/n8n
+# Copier tes community nodes personnalisés
+COPY ./packages/community-nodes /usr/local/lib/node_modules/n8n/packages/community-nodes
 COPY --from=launcher-downloader /launcher-bin/* /usr/local/bin/
 COPY docker/images/n8n/docker-entrypoint.sh /
 COPY docker/images/n8n/n8n-task-runners.json /etc/n8n-task-runners.json
 
 RUN cd /usr/local/lib/node_modules/n8n && \
-		npm rebuild sqlite3 && \
+    npm install ./packages/community-nodes/n8n-nodes-elevenlabs
 		ln -s /usr/local/lib/node_modules/n8n/bin/n8n /usr/local/bin/n8n && \
     mkdir -p /home/node/.n8n && \
     chown -R node:node /home/node
