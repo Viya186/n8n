@@ -76,8 +76,7 @@ USER node
 # 👉 Build du node LangChain
 USER node
 RUN cd /usr/local/lib/node_modules/n8n/packages/community-nodes/nodes-langchain \
-&& corepack enable \
-&& corepack prepare pnpm@8.15.5 --activate \
+&& npm install -g pnpm@8.15.5 \
 && pnpm install \
 && pnpm run build
 
