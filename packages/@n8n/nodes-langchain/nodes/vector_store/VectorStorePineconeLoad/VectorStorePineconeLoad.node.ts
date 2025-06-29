@@ -117,3 +117,4 @@ export class VectorStorePineconeLoad implements INodeType {
 		};
 	}
 }
+ 
