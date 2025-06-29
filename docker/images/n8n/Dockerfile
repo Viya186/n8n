@@ -76,8 +76,10 @@ USER node
 # 👉 Build du node LangChain
 USER node
 RUN cd /usr/local/lib/node_modules/n8n/packages/community-nodes/nodes-langchain \
-  && npm install \
-  && npm run build
+&& corepack enable \
+&& corepack prepare pnpm@8.15.5 --activate \
+&& pnpm install \
+&& pnpm run build
 
 EXPOSE 5678/tcp
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
