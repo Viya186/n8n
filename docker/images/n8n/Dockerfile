@@ -73,6 +73,12 @@ USER root
 RUN cd /usr/local/lib/node_modules/n8n && npm install @elevenlabs/n8n-nodes-elevenlabs
 USER node
 
+# 👉 Build du node LangChain
+USER node
+RUN cd /usr/local/lib/node_modules/n8n/packages/community-nodes/nodes-langchain \
+  && npm install \
+  && npm run build
+
 EXPOSE 5678/tcp
 ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
 
